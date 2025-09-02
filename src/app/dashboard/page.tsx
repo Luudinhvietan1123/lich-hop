@@ -62,7 +62,7 @@ export default async function DashboardPage() {
   );
 
   return (
-    <div className="mx-auto max-w-5xl p-6 space-y-6">
+    <div className="mx-auto max-w-6xl px-6 py-8 sm:py-10 lg:py-16 space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold title-neon">Your meetings</h2>
         <Link href="/schedule" className="btn-neon">Schedule a meeting</Link>

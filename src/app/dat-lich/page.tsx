@@ -88,7 +88,7 @@ export default function DatLichPage() {
   }, [gioBatDau, ngay, duration, setValue]);
 
   return (
-    <div className="mx-auto max-w-3xl p-6">
+    <div className="mx-auto max-w-5xl px-6 py-8 sm:py-10 lg:py-16">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold title-neon">Schedule a meeting</h2>
         <div className="flex gap-2">
@@ -97,8 +97,8 @@ export default function DatLichPage() {
         </div>
       </div>
       <h2 className="text-lg font-semibold mb-4">Enter information and schedule</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 card">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 card">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
           <div>
             <label className="block text-sm mb-1">Name</label>
             <input className="input-neon" {...register("ten")} />
@@ -130,7 +130,7 @@ export default function DatLichPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
           <div>
             <label className="block text-sm mb-1">Date</label>
             <input className="input-neon" type="date" {...register("ngay")} />

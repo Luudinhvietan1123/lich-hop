@@ -33,7 +33,7 @@ export default function ThanhCongPage() {
   })();
 
   return (
-    <div className="mx-auto max-w-3xl p-6">
+    <div className="mx-auto max-w-5xl px-6 py-8 sm:py-10 lg:py-16">
       <div className="card border-l-4" style={{ borderColor: 'var(--primary)' }}>
         <h2 className="text-xl font-semibold mb-2" style={{ color: 'var(--primary)' }}>Meeting created successfully!</h2>
         <p className="mb-4">Your meeting has been created and invitations were sent to all participants.</p>

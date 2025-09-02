@@ -2,6 +2,7 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function ThanhCongPage() {
   const params = useSearchParams();
@@ -67,6 +68,11 @@ export default function ThanhCongPage() {
             <Link href="/schedule" className="btn-neon inline-block">Create another</Link>
             <Link href="/" className="btn-neon inline-block">Back to home</Link>
           </div>
+        </div>
+      </div>
+      <div className="pt-6 flex justify-center">
+        <div className="relative" style={{ width: 72, height: 72 }}>
+          <Image src="/logo.png" alt="Logo" fill sizes="72px" style={{ objectFit: 'contain' }} />
         </div>
       </div>
     </div>

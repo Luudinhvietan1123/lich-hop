@@ -19,6 +19,14 @@ model Event {
   endTime       DateTime
   timezone      String
   meetLink      String?
+  googleEventId String?
+  status        EventStatus @default(UPCOMING)
   createdAt     DateTime @default(now())
+}
+
+enum EventStatus {
+  UPCOMING
+  PAST
+  CANCELED
 }
 

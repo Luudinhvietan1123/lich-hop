@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { google } from "googleapis";
+import { prisma } from "@/lib/prisma";
 
 export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
@@ -27,6 +28,32 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
     });
   } catch (e: any) {
     return NextResponse.json({ error: e?.message || "Cannot fetch event" }, { status: 500 });
+  }
+}
+
+export async function DELETE(_req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+  const session = await getServerSession(authOptions);
+  if (!session || !(session as any).accessToken) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { id } = await ctx.params;
+  // Tìm event trong DB để lấy googleEventId
+  const ev = await prisma.event.findUnique({ where: { id } });
+  if (!ev) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (ev.startTime < new Date()) {
+    return NextResponse.json({ error: "Only future events can be canceled" }, { status: 400 });
+  }
+  try {
+    if (ev.googleEventId) {
+      const oauth2Client = new google.auth.OAuth2();
+      oauth2Client.setCredentials({ access_token: (session as any).accessToken as string });
+      const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+      await calendar.events.delete({ calendarId: "primary", eventId: ev.googleEventId, sendUpdates: "all" });
+    }
+    await prisma.event.update({ where: { id }, data: { status: "CANCELED" } });
+    return NextResponse.json({ ok: true });
+  } catch (e: any) {
+    return NextResponse.json({ error: e?.message || "Cancel failed" }, { status: 500 });
   }
 }
 

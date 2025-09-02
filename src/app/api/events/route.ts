@@ -137,6 +137,7 @@ export async function POST(req: NextRequest) {
         endTime: end,
         timezone,
         meetLink: suKien.data.hangoutLink || undefined,
+        googleEventId: suKien.data.id || undefined,
       },
     });
 

@@ -87,11 +87,11 @@ export default function DatLichPage() {
   // Calendar month state
   const [thangDangChon, setThangDangChon] = useState(() => { const d=new Date(); return new Date(d.getFullYear(), d.getMonth(), 1); });
   const ngayDangChon = watch("ngay");
-  const chonNgay = (d: Date) => { setValue("ngay", ymdFromDateLocal(d)); };
-  const daysOfWeek: readonly string[] = ["MON","TUE","WED","THU","FRI","SAT","SUN"] as const;
+  // const chonNgay = (d: Date) => { setValue("ngay", ymdFromDateLocal(d)); };
+  // Weekday labels rendered inline to avoid unused var warnings
   const monthLabel = useMemo(()=> thangDangChon.toLocaleString(undefined,{month:"long",year:"numeric"}),[thangDangChon]);
   const gridDays = useMemo(()=>{ const y=thangDangChon.getFullYear(); const m=thangDangChon.getMonth(); const first=new Date(y,m,1); const last=new Date(y,m+1,0); const dow=(first.getDay()+6)%7; const days:(Date|null)[]=[]; for(let i=0;i<dow;i++) days.push(null); for(let d=1; d<=last.getDate(); d++) days.push(new Date(y,m,d)); return days; },[thangDangChon]);
-  const startOfToday = useMemo(()=>{ const t=new Date(now); t.setHours(0,0,0,0); return t; },[now]);
+  // const startOfToday = useMemo(()=>{ const t=new Date(now); t.setHours(0,0,0,0); return t; },[now]);
   useEffect(()=>{ if(!ngay||!gioBatDau) return; const start=toDate(new Date(`${ngay}T${gioBatDau}`),{timeZone: chonTimezone}); const end=addMinutes(start,duration); setValue("gioKetThuc", format(end,"HH:mm")); },[gioBatDau,ngay,duration,chonTimezone,setValue]);
 
   // Helpers for safe local date handling with yyyy-MM-dd
@@ -105,7 +105,7 @@ export default function DatLichPage() {
     const da = d.getDate().toString().padStart(2, "0");
     return `${y}-${m}-${da}`;
   };
-  const localTodayYmd = () => ymdFromDateLocal(new Date());
+  // const localTodayYmd = () => ymdFromDateLocal(new Date());
 
   // Get YYYY-MM-DD string of given date in specific timezone
   const ymdInTz = (date: Date, tz: string) => {
@@ -187,7 +187,13 @@ export default function DatLichPage() {
             <div className="w-full">
               <label className="block text-sm mb-1">Time zone</label>
               <select className="select-neon w-full" value={chonTimezone} onChange={(e) => setChonTimezone(e.target.value)}>
-                {(() => { const zones = (Intl as any).supportedValuesOf ? (Intl as any).supportedValuesOf('timeZone') : ['Asia/Ho_Chi_Minh','Asia/Bangkok','Asia/Tokyo','Europe/London','America/New_York']; return zones.map((z: string) => <option key={z} value={z}>{z}</option>); })()}
+                {(() => {
+                  const maybe = (Intl as unknown as { supportedValuesOf?: (key: string) => string[] }).supportedValuesOf;
+                  const zones = typeof maybe === 'function'
+                    ? maybe('timeZone')
+                    : ['Asia/Ho_Chi_Minh','Asia/Bangkok','Asia/Tokyo','Europe/London','America/New_York'];
+                  return zones.map((z) => <option key={z} value={z}>{z}</option>);
+                })()}
               </select>
             </div>
             <div className="flex items-center justify-center gap-2 w-full">
@@ -199,11 +205,11 @@ export default function DatLichPage() {
           </div>
 
           <div className="flex flex-col items-center">
-            <div className="mb-2 opacity-80 text-sm text-center">{watch("ngay") ? parseLocalYmd(watch("ngay") as string).toDateString() : "Select a time"}</div>
+            <div className="mb-2 opacity-80 text-sm text-center">{watch("ngay") ? parseLocalYmd(String(watch("ngay"))).toDateString() : "Select a time"}</div>
             <div ref={slotsRef} className="flex flex-col gap-2 max-h-[396px] overflow-y-auto w-full">
               {danhSachSlot.map((slot) => {
-                const selectedSlot = watch("gioBatDau");
-                const base = (watch("ngay") as string) || ymdInTz(new Date(), chonTimezone);
+                const selectedSlot = String(watch("gioBatDau") || "");
+                const base = String(watch("ngay") || "") || ymdInTz(new Date(), chonTimezone);
                 const selectedDate = parseLocalYmd(base);
                 const todayLocal = parseLocalYmd(ymdInTz(new Date(), chonTimezone));
                 const slotStart = toDate(new Date(`${base}T${slot}`), { timeZone: chonTimezone });

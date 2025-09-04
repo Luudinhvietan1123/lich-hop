@@ -33,7 +33,7 @@ const schema = z.object({
 export async function POST(req: NextRequest) {
   // Yêu cầu đăng nhập
   const session = await getServerSession(authOptions);
-  if (!session || !(session as any).accessToken) {
+  if (!session || !(session as unknown as { accessToken?: string }).accessToken) {
     return NextResponse.json({ error: "Yeu cau dang nhap" }, { status: 401 });
   }
 

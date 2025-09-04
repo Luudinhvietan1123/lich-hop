@@ -1,12 +1,14 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
+
+export const dynamic = "force-dynamic";
 
 type EventDetail = { id?: string; summary?: string; description?: string; start?: { dateTime?: string }; end?: { dateTime?: string }; hangoutLink?: string; attendees?: number };
 
-export default function ThanhCongPage() {
+function NoiDungThanhCong() {
   const params = useSearchParams();
   const id = params.get("id");
   const [ev, setEv] = useState<EventDetail | null>(null);
@@ -20,7 +22,6 @@ export default function ThanhCongPage() {
         setEv(data);
       } finally {
         setLoading(false);
-        // chuyển trang chính sau 8s
         setTimeout(() => {
           window.location.href = "/";
         }, 8000);
@@ -78,6 +79,14 @@ export default function ThanhCongPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ThanhCongPage() {
+  return (
+    <Suspense fallback={<div className="mx-auto max-w-5xl px-6 py-8 sm:py-10 lg:py-16"><div className="card">Loading...</div></div>}>
+      <NoiDungThanhCong />
+    </Suspense>
   );
 }
 

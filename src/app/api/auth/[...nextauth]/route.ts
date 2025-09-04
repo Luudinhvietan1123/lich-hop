@@ -47,12 +47,13 @@ export const authOptions: NextAuthOptions = {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: params.toString(),
           });
-          const data = (await res.json()) as any;
+          type GoogleTokenResponse = { access_token: string; expires_in: number; refresh_token?: string };
+          const data: GoogleTokenResponse = await res.json();
           if (!res.ok) throw new Error(JSON.stringify(data));
           token.accessToken = data.access_token;
           token.accessTokenExpires = Date.now() + (data.expires_in ? data.expires_in * 1000 : 3600 * 1000);
           if (data.refresh_token) token.refreshToken = data.refresh_token;
-        } catch {
+        } catch (e) {
           // Xóa token khi lỗi để buộc login lại
           delete token.accessToken;
           delete token.refreshToken;
@@ -62,7 +63,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      (session as any).accessToken = token.accessToken;
+      (session as unknown as { accessToken?: string }).accessToken = (token as unknown as { accessToken?: string }).accessToken;
       return session;
     },
   },

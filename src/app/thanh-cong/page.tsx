@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
+type EventDetail = { id?: string; summary?: string; description?: string; start?: { dateTime?: string }; end?: { dateTime?: string }; hangoutLink?: string; attendees?: number };
+
 export default function ThanhCongPage() {
   const params = useSearchParams();
   const id = params.get("id");
-  const [ev, setEv] = useState<any>(null);
+  const [ev, setEv] = useState<EventDetail | null>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!id) return;

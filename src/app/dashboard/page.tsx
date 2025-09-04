@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
 import CancelButton from "./CancelButton";
+import type { Event } from "@prisma/client";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -36,7 +37,7 @@ export default async function DashboardPage() {
     prisma.event.findMany({ where: { status: "CANCELED" }, orderBy: { startTime: "desc" }, take: 20 }),
   ]);
 
-  const Section = ({ title, items, allowCancel }: { title: string; items: any[]; allowCancel?: boolean }) => (
+  const Section = ({ title, items, allowCancel }: { title: string; items: Event[]; allowCancel?: boolean }) => (
     <div className="card">
       <h3 className="font-semibold mb-3 title-neon">{title}</h3>
       {items.length === 0 ? (

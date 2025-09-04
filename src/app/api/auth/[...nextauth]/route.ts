@@ -53,7 +53,7 @@ export const authOptions: NextAuthOptions = {
           token.accessToken = data.access_token;
           token.accessTokenExpires = Date.now() + (data.expires_in ? data.expires_in * 1000 : 3600 * 1000);
           if (data.refresh_token) token.refreshToken = data.refresh_token;
-        } catch (e) {
+        } catch (_e) {
           // Xóa token khi lỗi để buộc login lại
           delete token.accessToken;
           delete token.refreshToken;

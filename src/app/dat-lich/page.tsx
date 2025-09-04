@@ -240,7 +240,7 @@ export default function DatLichPage() {
       </form>
       <div className="mt-8 flex justify-center">
         <div className="relative" style={{ width: 72, height: 72 }}>
-          <Image src="/logo.png" alt="Logo" fill sizes="72px" style={{ objectFit: 'contain' }} />
+          <Image src="/Logo.png" alt="Logo" fill sizes="72px" style={{ objectFit: 'contain' }} />
         </div>
       </div>
     </div>

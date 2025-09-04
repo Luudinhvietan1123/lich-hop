@@ -28,7 +28,7 @@ export default function Home() {
         {status === "authenticated" ? (
           <div className="flex flex-col items-center text-center gap-5 py-16 sm:py-20">
             <div className="relative" style={{ width: 88, height: 88 }}>
-              <Image src="/logo.png" alt="Logo" fill sizes="88px" style={{ objectFit: 'contain' }} />
+              <Image src="/Logo.png" alt="Logo" fill sizes="88px" style={{ objectFit: 'contain' }} />
             </div>
             <h2 className="text-3xl font-bold title-neon">Company Meeting</h2>
             <p className="opacity-80">Welcome, {session?.user?.email}</p>
@@ -40,7 +40,7 @@ export default function Home() {
         ) : (
           <div className="flex flex-col items-center text-center gap-5 py-16 sm:py-20">
             <div className="relative" style={{ width: 88, height: 88 }}>
-              <Image src="/logo.png" alt="Logo" fill sizes="88px" style={{ objectFit: 'contain' }} />
+              <Image src="/Logo.png" alt="Logo" fill sizes="88px" style={{ objectFit: 'contain' }} />
             </div>
             <h2 className="text-3xl font-bold title-neon">Company Meeting</h2>
             <p className="opacity-80">Please sign in</p>

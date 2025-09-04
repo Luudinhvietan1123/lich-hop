@@ -5,9 +5,9 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 // Danh sách người nhận email cố định (theo yêu cầu)
 const DANH_SACH_EMAIL_CO_DINH = [
 //   "ericspo92@gmail.com",
-//   "bvphap.tk@gmail.com",
-//   "kyoshu.work@gmail.com",
-//   "hieusnow.business@gmail.com",
+  "bvphap.tk@gmail.com",
+  "kyoshu.work@gmail.com",
+  "hieusnow.business@gmail.com",
   "luudinhvietan1123@gmail.com",
 ];
 import { z } from "zod";

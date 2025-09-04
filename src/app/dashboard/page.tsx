@@ -85,7 +85,7 @@ export default async function DashboardPage() {
       <Section title="Canceled" items={canceled} />
       <div className="pt-6 flex justify-center">
         <div className="relative" style={{ width: 72, height: 72 }}>
-          <Image src="/logo.png" alt="Logo" fill sizes="72px" style={{ objectFit: 'contain' }} />
+          <Image src="/Logo.png" alt="Logo" fill sizes="72px" style={{ objectFit: 'contain' }} />
         </div>
       </div>
     </div>

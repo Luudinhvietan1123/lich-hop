@@ -42,14 +42,14 @@ export async function POST(req: NextRequest) {
   const rl = kiemSoatTanSuat(`events:${ip}`, 5, 60 * 60 * 1000);
   if (!rl.allowed) return NextResponse.json({ error: "Thu qua nhieu. Thu lai sau." }, { status: 429 });
 
-  let body: unknown;
+  let body: Record<string, unknown> | null = null;
   try {
-    body = await req.json();
+    body = (await req.json()) as Record<string, unknown>;
   } catch {
     return NextResponse.json({ error: "JSON khong hop le" }, { status: 400 });
   }
 
-  const parsed = schema.safeParse(body);
+  const parsed = schema.safeParse(body ?? {});
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }

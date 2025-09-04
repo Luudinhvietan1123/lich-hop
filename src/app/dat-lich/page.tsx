@@ -74,20 +74,21 @@ export default function DatLichPage() {
   });
   useEffect(() => {
     try { const tz = Intl.DateTimeFormat().resolvedOptions().timeZone; if (tz && tz !== chonTimezone) setChonTimezone(tz); } catch {}
-  }, []);
+  }, [chonTimezone]);
   const [now, setNow] = useState(new Date());
   useEffect(() => { const id = setInterval(() => setNow(new Date()), 60_000); return () => clearInterval(id); }, []);
 
   // Slots 30'
   const danhSachSlot = (() => { const slots: string[] = []; for (let m = 8*60; m <= 22*60+30; m+=30){const h=(m/60|0).toString().padStart(2,"0"); const mm=(m%60).toString().padStart(2,"0"); slots.push(`${h}:${mm}`);} return slots; })();
   const slotsRef = useRef<HTMLDivElement|null>(null);
-  useEffect(()=>{ const base = watch("ngay") || new Date().toISOString().slice(0,10); const idx = danhSachSlot.findIndex(s => toDate(new Date(`${base}T${s}`), { timeZone: chonTimezone }) > now); if(idx>=0 && slotsRef.current){ const row=44; const top=Math.max(0,(idx-1)*row); slotsRef.current.scrollTo({top}); } },[watch("ngay"),chonTimezone,now]);
+  const chosenDate = watch("ngay");
+  useEffect(()=>{ const base = chosenDate || new Date().toISOString().slice(0,10); const idx = danhSachSlot.findIndex(s => toDate(new Date(`${base}T${s}`), { timeZone: chonTimezone }) > now); if(idx>=0 && slotsRef.current){ const row=44; const top=Math.max(0,(idx-1)*row); slotsRef.current.scrollTo({top}); } },[chosenDate, chonTimezone, now, danhSachSlot]);
 
   // Calendar month state
   const [thangDangChon, setThangDangChon] = useState(() => { const d=new Date(); return new Date(d.getFullYear(), d.getMonth(), 1); });
   const ngayDangChon = watch("ngay");
-  const chonNgay = (d: Date) => { setValue("ngay", d.toISOString().slice(0,10)); };
-  const daysOfWeek = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
+  const chonNgay = (d: Date) => { setValue("ngay", ymdFromDateLocal(d)); };
+  const daysOfWeek: readonly string[] = ["MON","TUE","WED","THU","FRI","SAT","SUN"] as const;
   const monthLabel = useMemo(()=> thangDangChon.toLocaleString(undefined,{month:"long",year:"numeric"}),[thangDangChon]);
   const gridDays = useMemo(()=>{ const y=thangDangChon.getFullYear(); const m=thangDangChon.getMonth(); const first=new Date(y,m,1); const last=new Date(y,m+1,0); const dow=(first.getDay()+6)%7; const days:(Date|null)[]=[]; for(let i=0;i<dow;i++) days.push(null); for(let d=1; d<=last.getDate(); d++) days.push(new Date(y,m,d)); return days; },[thangDangChon]);
   const startOfToday = useMemo(()=>{ const t=new Date(now); t.setHours(0,0,0,0); return t; },[now]);
